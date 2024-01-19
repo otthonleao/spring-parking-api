@@ -4,6 +4,7 @@ import dev.otthon.parkingapi.entity.Usuario;
 import dev.otthon.parkingapi.service.UsuarioService;
 import dev.otthon.parkingapi.web.dto.UsuarioCreateDTO;
 import dev.otthon.parkingapi.web.dto.UsuarioResponseDTO;
+import dev.otthon.parkingapi.web.dto.UsuarioSenhaDTO;
 import dev.otthon.parkingapi.web.dto.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,9 +37,13 @@ public class UsuarioController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Usuario> updatePassword(@PathVariable Long id, @RequestBody Usuario usuario) {
-        Usuario user = usuarioService.editarSenha(id, usuario.getPassword());
-        return ResponseEntity.ok(user);
+    public ResponseEntity<Void> updatePassword(@PathVariable Long id, @RequestBody UsuarioSenhaDTO dto) {
+        Usuario user = usuarioService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
+        return ResponseEntity.noContent().build();
+        /*
+        * Em alguns casos não é necessário enviar nada no body da response, como em um update de senha
+        * Então utilizamos o tipo void e retornamos um noContent() que retorna um code 204 - No Content
+        * */
     }
 
     @GetMapping
