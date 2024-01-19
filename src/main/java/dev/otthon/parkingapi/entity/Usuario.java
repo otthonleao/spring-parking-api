@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Getter @Setter @NoArgsConstructor
-@Table(name = "usuarios")
+@Table(name = "tb_usuarios")
 public class Usuario implements Serializable {
 
     @Id
@@ -28,7 +28,7 @@ public class Usuario implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE", nullable = false, length = 25)
-    private Role role;
+    private Role role = Role.ROLE_CLIENTE;
 
     /* AUDITORIA */
     @Column(name = "DATA_CRIACAO")
