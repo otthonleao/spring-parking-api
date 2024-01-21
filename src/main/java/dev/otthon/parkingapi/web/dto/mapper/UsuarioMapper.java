@@ -6,6 +6,9 @@ import dev.otthon.parkingapi.web.dto.UsuarioResponseDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class UsuarioMapper {
 
     public static Usuario toUsuario(UsuarioCreateDTO createDTO) {
@@ -24,4 +27,9 @@ public class UsuarioMapper {
         mapper.addMappings(props);
         return mapper.map(usuario, UsuarioResponseDTO.class);
     }
+
+    public static List<UsuarioResponseDTO> toListDTO(List<Usuario> usuarios) {
+        return  usuarios.stream().map(user -> toDTO(user)).collect(Collectors.toList());
+    }
+
 }
