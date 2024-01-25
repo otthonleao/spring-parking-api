@@ -2,6 +2,7 @@ package dev.otthon.parkingapi.service;
 
 import dev.otthon.parkingapi.entity.Usuario;
 import dev.otthon.parkingapi.repository.UsuarioRepository;
+import dev.otthon.parkingapi.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class UsuarioService {
     @Transactional(readOnly = true) //Indica para o Spring que esse método apenas faz consulta no DB.
     public Usuario buscarPorId(Long id) {
         return usuarioRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Usuário não encontrado")
+                () -> new EntityNotFoundException(String.format("Usuário id=%s não encontrado", id))
         );
     }
 
