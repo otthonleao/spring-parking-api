@@ -6,6 +6,12 @@ import dev.otthon.parkingapi.web.dto.UsuarioCreateDTO;
 import dev.otthon.parkingapi.web.dto.UsuarioResponseDTO;
 import dev.otthon.parkingapi.web.dto.UsuarioSenhaDTO;
 import dev.otthon.parkingapi.web.dto.mapper.UsuarioMapper;
+import dev.otthon.parkingapi.web.exception.ErrorMessage;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Usuarios", description = "Contém todas as operações relativas aos recursos para cadastro, edição e leitura de um usuário")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/usuarios")
@@ -25,18 +32,35 @@ public class UsuarioController {
     @RequestBody: é usado para extrair dados do corpo da requisição.
     @PathVariable: é usado para extrair valores de variáveis de modelo na URI da requisição.
      */
+    @Operation(summary = "Criar um novo usuário", description = "Recurso para criar um novo usuário",
+                responses = {
+                    @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDTO.class))),
+                    @ApiResponse(responseCode = "409", description = "E-mail já cadastrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "422", description = "Recurso não processado por dados de entrada inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+                })
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> create(@Valid @RequestBody UsuarioCreateDTO createDTO) {
         Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDTO(user));
     }
 
+    @Operation(summary = "Recuperar usuário pelo ID", description = "Recuperar usuário pelo id",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Recurso recuperado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Recurso não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> getById(@PathVariable Long id) {
         Usuario user = usuarioService.buscarPorId(id);
         return ResponseEntity.ok(UsuarioMapper.toDTO(user));
     }
 
+    @Operation(summary = "Atualizar senha", description = "Para atualizar a senha é necessário colocar a senha atual, a senha nova e novamente a senha nova para confirmação",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Senha atualizada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "A senha não confere", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "404", description = "Recurso não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updatePassword(@PathVariable Long id, @Valid @RequestBody UsuarioSenhaDTO dto) {
         Usuario user = usuarioService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
