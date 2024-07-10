@@ -23,7 +23,7 @@ public class Usuario implements Serializable {
     @Column(name = "USERNAME", nullable = false, unique = true, length = 100)
     private String username;
 
-    @Column(name = "PASSWORD", nullable = false)
+    @Column(name = "PASSWORD", nullable = false, length = 200)
     private String password;
 
     @Enumerated(EnumType.STRING)

@@ -32,7 +32,7 @@ public class UsuarioController {
     @RequestBody: é usado para extrair dados do corpo da requisição.
     @PathVariable: é usado para extrair valores de variáveis de modelo na URI da requisição.
      */
-    @Operation(summary = "Criar um novo usuário", description = "Recurso para criar um novo usuário",
+    @Operation(summary = "Criar um novo usuário", description = "Recurso para criar um novo usuário com email e senha",
                 responses = {
                     @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDTO.class))),
                     @ApiResponse(responseCode = "409", description = "E-mail já cadastrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
