@@ -1,0 +1,2 @@
+INSERT INTO TB_USUARIOS (id, username, password, role) VALUES (100, 'test1@mail.com', '123456', 'ROLE_ADMIN');
+INSERT INTO TB_USUARIOS (id, username, password, role) VALUES (101, 'test2@mail.com', '123456', 'ROLE_CLIENTE');
