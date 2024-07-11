@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -15,6 +16,7 @@ import java.util.Objects;
 @Table(name = "tb_usuarios", schema = "PUBLIC")
 public class Usuario implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
