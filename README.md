@@ -1,4 +1,4 @@
-# Parking API Rest
+# Rest API - Parking Management 
 Bem-vindo à Parking API! Este projeto é uma API RESTful desenvolvida com **Spring Boot 3** e **Java 17**.
 
 Esta API RESTful permite gerenciar o estacionamento de veículos, incluindo operações de CRUD e geração de relatórios. A segurança é garantida com autenticação JWT e Spring Security. A documentação da API é feita com OpenAPI e Swagger.
