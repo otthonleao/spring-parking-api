@@ -5,6 +5,8 @@ import dev.otthon.parkingapi.enums.Role;
 import dev.otthon.parkingapi.repository.UsuarioRepository;
 import dev.otthon.parkingapi.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +17,16 @@ import java.util.List;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+        try {
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+            return usuarioRepository.save(usuario);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException(String.format("Username '%s' já cadastrado", usuario.getUsername()));
+        }
     }
 
     @Transactional(readOnly = true) //Indica para o Spring que esse método apenas faz consulta no DB.
@@ -37,11 +45,11 @@ public class UsuarioService {
 
         // Verifica se a senha atual é igual a cadastrada no banco
         Usuario user = buscarPorId(id);
-        if(!user.getPassword().equals(senhaAtual)) {
+        if(!passwordEncoder.matches(senhaAtual, user.getPassword())) {
             throw new RuntimeException("Sua senha não confere");
         }
 
-        user.setPassword(novaSenha);
+        user.setPassword(passwordEncoder.encode(novaSenha));
         return user;
     }
 
