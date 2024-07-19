@@ -1,6 +1,7 @@
 package dev.otthon.parkingapi.service;
 
 import dev.otthon.parkingapi.entity.Usuario;
+import dev.otthon.parkingapi.enums.Role;
 import dev.otthon.parkingapi.repository.UsuarioRepository;
 import dev.otthon.parkingapi.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +48,17 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public List<Usuario> buscarTodos() {
         return usuarioRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Usuario buscarPorUsername(String username) {
+        return usuarioRepository.findByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException((String.format("Usuário com '%s' não encontrado", username)))
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Role buscarRolePorUsername(String username) {
+        return usuarioRepository.findRoleByUsername(username);
     }
 }
