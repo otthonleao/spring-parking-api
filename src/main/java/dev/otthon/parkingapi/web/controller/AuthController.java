@@ -5,6 +5,7 @@ import dev.otthon.parkingapi.jwt.JwtUserDetailsService;
 import dev.otthon.parkingapi.web.dto.UsuarioLoginDTO;
 import dev.otthon.parkingapi.web.exception.ErrorMessage;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,12 +28,16 @@ public class AuthController {
     private final JwtUserDetailsService jwtUserDetailsService;
 
     @PostMapping("/auth")
-    public ResponseEntity<?> autenticar(@RequestBody UsuarioLoginDTO dto, HttpServletRequest request) {
+    public ResponseEntity<?> autenticar(@RequestBody @Valid UsuarioLoginDTO dto, HttpServletRequest request) {
         log.info("Autenticação feita pelo login: {}", dto.getUsername() );
         try {
+
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
             authenticationManager.authenticate(authenticationToken);
-            JwtToken token = jwtUserDetailsService.getTokenAuthentication(dto.getUsername());
+            JwtToken token = jwtUserDetailsService.getTokenAuthenticated(dto.getUsername());
+
+            return ResponseEntity.ok(token);
+
         } catch (AuthenticationException ex) {
             log.warn("Username/email invalido: {}", dto.getUsername());
         }

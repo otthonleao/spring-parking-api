@@ -22,15 +22,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
         final String token = request.getHeader(JwtUtils.JWT_AUTHORIZATION);
-        if (token != null || !token.startsWith(JwtUtils.JWT_BEARER)) {
-            log.info("JWT toke está nulo, vazio ou não iniciado com 'Bearer '.");
+
+        if (token == null || !token.startsWith(JwtUtils.JWT_BEARER)) {
+            log.info("JWT token está nulo, vazio ou não iniciado com 'Bearer '.");
             filterChain.doFilter(request, response);
             return;
         }
 
         if (!JwtUtils.isTokenValid(token)) {
-            log.warn("JWT token invalido ou expirado");
+            log.warn("JWT token inválido ou expirado");
             filterChain.doFilter(request, response);
             return;
         }

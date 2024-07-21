@@ -34,16 +34,18 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(JWT_SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
+    // PROCESSO DE EXPIRAÇÃO DO TOKEN
     private static Date toExpiration(Date start) {
         LocalDateTime dateTime = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         LocalDateTime end = dateTime
                 .plusDays(JWT_EXPIRATION_DAYS)
-                .plusHours(JWT_EXPIRATION_DAYS)
+                .plusHours(JWT_EXPIRATION_HOURS)
                 .plusMinutes(JWT_EXPIRATION_MINUTES);
 
         return Date.from(end.atZone(ZoneId.systemDefault()).toInstant());
     }
 
+    // CRIAR O TOKEN
     public static JwtToken createJwtToken(String username, String role) {
 
         Date issuedAt = new Date();
@@ -51,7 +53,7 @@ public class JwtUtils {
 
         String token = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
-                .setSubject(username)
+                .setSubject(username) // verifica se o user consta no DB
                 .setIssuedAt(limit)
                 .signWith(generateKey(), SignatureAlgorithm.HS256)
                 .claim("role", role)
@@ -69,7 +71,7 @@ public class JwtUtils {
 
     private static Claims getClaimsFromToken(String token) {
         try {
-            Jwts.parser()
+            return Jwts.parser()
                     .setSigningKey(generateKey()).build()
                     .parseClaimsJws(refactorToken(token)).getBody();
         } catch (JwtException exception) {
