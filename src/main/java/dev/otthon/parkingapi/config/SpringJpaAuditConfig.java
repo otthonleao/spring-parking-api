@@ -20,7 +20,7 @@ public class SpringJpaAuditConfig implements AuditorAware<String> {
             return Optional.of(authentication.getName());
         }
 
-        return Optional.empty();
+        return null;
     }
 
 }
