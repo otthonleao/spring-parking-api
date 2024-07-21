@@ -38,7 +38,8 @@ public class Usuario implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE", nullable = false, length = 25)
-    private Role role = Role.ROLE_CLIENTE;
+//    private Role role = Role.ROLE_CLIENTE;
+    private Role role = Role.getRandomRole();
 
     @CreatedDate /* AUDITORIA */
     @Column(name = "DATA_CRIACAO")
