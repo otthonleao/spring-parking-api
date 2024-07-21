@@ -6,23 +6,29 @@ Esta API RESTful permite gerenciar o estacionamento de veículos, incluindo oper
 ## Funcionalidades
 
 #### Autenticação e Autorização:
-- [ ] Segurança com Spring Security
-- [ ] Autenticação utilizando Tokens JWT
+- [x] Segurança com Spring Security
+- [x] Autenticação utilizando Tokens JWT
 #### Operações de CRUD:
 - [x] Gerenciamento de Usuários
       
+      - [POST] /api/v1/usuarios - Cadastra um usuário
+            {
+                "username": "admin@email.com",
+                "password": "123456"
+            }
+      - [POST] /api/v1/auth - Autentica o usuário cadastrado e gera um token
       - [GET] /api/v1/usuarios - Retorna todos os usuários
       - [GET] /api/v1/usuarios/{id} - Retorna usuário por ID
-      - [POST] /api/v1/usuarios - Cadastra um usuário
       - [PATCH] /api/v1/usuarios/{id} - Atualiza a senha de um usuário
+      
 - [ ] Gerenciamento de Clientes
 - [ ] Gerenciamento de Veículos
 - [ ] Gerenciamento de Estacionamentos
 #### Documentação:
 - [x] Documentação da API com OpenAPI e Swagger (Pode ser acessada em http://localhost:8080/docs-parking-api.html após iniciar a aplicação).
 #### Validações e Auditoria:
-- [ ] Validação de campos com Jakarta Bean Validation
-- [ ] Configuração de auditoria com Spring-JPA-Auditing
+- [x] Validação de campos com Jakarta Bean Validation
+- [x] Configuração de auditoria com Spring-JPA-Auditing
 #### Relatórios:
 - [ ] Geração de relatórios com JasperReports e JasperSoft Studio
 #### Testes:
