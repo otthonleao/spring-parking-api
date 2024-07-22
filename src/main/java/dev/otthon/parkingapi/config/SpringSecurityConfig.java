@@ -22,8 +22,17 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableMethodSecurity
 public class SpringSecurityConfig {
 
+    private final String[] DOCUMENTATION_OPENAPI = {
+            "/docs/index.html",
+            "/docs-parking-api.html", "/docs-parking-api/**",
+            "v3/api-docs/**",
+            "/swagger-ui-custom.html", "/swagger-ui.html", "/swagger-ui/**",
+            "/**.html", "/webjars/**", "/configuration/**", "/swagger-resources/**"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         return http
                 .csrf(csrf ->  csrf.disable()) // Para o Spring trabalhar com a aplicação stateless
                 .formLogin(form -> form.disable()) // Informa que a API não deve esperar por um formulário de login
@@ -32,6 +41,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "api/v1/usuarios").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/v1/auth").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
                         .anyRequest().authenticated()
                 ).sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
