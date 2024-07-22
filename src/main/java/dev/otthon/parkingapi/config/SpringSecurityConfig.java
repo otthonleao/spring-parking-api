@@ -1,5 +1,6 @@
 package dev.otthon.parkingapi.config;
 
+import dev.otthon.parkingapi.jwt.JwtAutheticationEntrypoint;
 import dev.otthon.parkingapi.jwt.JwtAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,6 +40,8 @@ public class SpringSecurityConfig {
                 ).headers(headers -> headers
                         .defaultsDisabled()
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin) // Configuração para o h2 funcionar corretamente
+                ).exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(new JwtAutheticationEntrypoint())
                 ).build();
     }
 

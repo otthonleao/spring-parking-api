@@ -12,9 +12,27 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
+
 @Slf4j
 @RestControllerAdvice
 public class ApiExceptionHandler {
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorMessage> AccessDeniedException(AccessDeniedException excecao, HttpServletRequest request) {
+
+        log.error("API Error - ", excecao);
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(
+                        new ErrorMessage(
+                                request,
+                                HttpStatus.FORBIDDEN,
+                                excecao.getMessage()
+                        )
+                );
+    };
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorMessage> EntityNotFoundException(RuntimeException excecao, HttpServletRequest request) {
